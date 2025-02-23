@@ -1,0 +1,7 @@
+div
+  .date= formattedDate
+  .weather-container
+    .weather-icon
+      i.buttonIcon(icon-name=weatherIcon, height="48", width="48")      
+    .weather-temp= `${weather.temperature.value.toFixed(0)}°${weatherConfig.unit}`
+    .weather-desc= weather.description

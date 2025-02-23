@@ -1,0 +1,51 @@
+name: Deploy webdomo
+
+env:
+  CONTEXT_DIR: "./sites/webdomo"
+  IMAGE_NAME: ${{ github.repository }}/webdomo
+  DOCKERFILE: Dockerfile
+  CAPROVER_APP: webdomo
+  DOCKER_REGISTRY: ghcr.io
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "sites/webdomo/**"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+          echo "IMAGE_NAME_WITH_REGISTRY=$DOCKER_REGISTRY/$IMAGE_NAME" >> $GITHUB_ENV
+          export IMAGE_NAME_WITH_REGISTRY=$DOCKER_REGISTRY/$IMAGE_NAME
+          echo "FULL_IMAGE_NAME=$IMAGE_NAME_WITH_REGISTRY:$GITHUB_SHA-gitsha" >> $GITHUB_ENV
+          echo "CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push Release to DockerHub
+        shell: bash
+        run: |
+          set -e
+          cd $CONTEXT_DIR
+          rm /tmp/build_args || echo OK
+          env >/tmp/build_args
+          echo "--build-arg \"CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA\"" >>/tmp/build_args
+          BUILD_ARGS=$(cat /tmp/build_args)
+          docker build -t $FULL_IMAGE_NAME -t $IMAGE_NAME_WITH_REGISTRY:latest -f Dockerfile $BUILD_ARGS --no-cache .
+          docker push $IMAGE_NAME_WITH_REGISTRY:latest
+          docker push $FULL_IMAGE_NAME
+      - name: Deploy to CapRover
+        uses: caprover/deploy-from-github@v1.1.2
+        with:
+          server: ${{ secrets.CAPROVER_HOST }}
+          app: ${{ env.CAPROVER_APP }}
+          token: "${{ secrets.WEBDOMO_CAPROVER_APP_TOKEN }}"
+          image: "${{ env.FULL_IMAGE_NAME }}"

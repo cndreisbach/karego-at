@@ -1,0 +1,162 @@
+@import "https://unpkg.com/open-props";
+@import "https://unpkg.com/open-props/normalize.min.css";
+
+:root {
+  --surface-1: #ebf3e9;
+  --accent-1: #05299a;
+  --accent-2: #c05275;
+  --accent-3: #535d2e;
+}
+
+svg {
+  stroke: var(--text-1);
+  fill: none;
+}
+
+body {
+  background-image: var(--surface-1);
+  font-family: var(--font-sans);
+}
+
+.main-backdrop {
+  max-width: var(--size-sm);
+  margin: 0 auto;
+  padding: var(--size-3) 0;
+}
+
+.main {
+  padding: var(--size-4) var(--size-2);
+  background-color: var(--surface-1);
+  border-radius: var(--radius-2);
+}
+
+.box {
+  border-top: 5px solid var(--accent-2);
+  padding: var(--size-3) var(--size-3);
+  box-shadow: var(--shadow-5);
+  margin-bottom: var(--size-3);
+}
+
+.Greeting {
+  grid-area: Greeting;
+}
+.Weather {
+  grid-area: Weather;
+}
+
+.Links1 {
+  grid-area: Links1;
+}
+
+.Links2 {
+  grid-area: Links2;
+}
+.Info {
+  grid-area: Info;
+}
+
+.Footer {
+  grid-area: Footer;
+  border-top-width: 0;
+  color: var(--text-2);
+}
+
+.Greeting div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--size-5);
+}
+
+.Greeting h2 {
+  font-size: var(--font-size-8);
+  font-weight: var(--font-weight-7);
+}
+
+.Greeting h3 {
+  font-weight: var(--font-weight-4);
+}
+
+.Weather .date {
+  color: var(--text-1);
+  font-size: var(--font-size-6);
+  font-weight: var(--font-weight-7);
+}
+
+.Weather .weather-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--font-size-4);
+}
+
+.Links .title {
+  display: flex;
+  gap: var(--size-1);
+  margin-bottom: var(--size-1);
+}
+
+.Links h3 {
+  font-weight: var(--weight-5);
+  font-size: var(--size-6);
+}
+
+.Links ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.Links .bookmarkGroup {
+  margin-bottom: var(--size-4);
+}
+
+.Info h3 {
+  font-weight: var(--weight-5);
+  font-size: var(--size-6);
+}
+
+.Info .countdown {
+  margin-bottom: var(--size-4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-1: #184359;
+    --accent-1: #ecba09;
+    --accent-2: #c71c27;
+    --accent-3: #e7e0c8;
+  }
+}
+
+@media (width >= 768px) {
+  .main-backdrop {
+    max-width: var(--size-md);
+  }
+
+  .Greeting div {
+    align-items: center;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: var(--size-4) var(--size-4);
+    grid-template-areas:
+      "Greeting Greeting Greeting Weather Weather Weather"
+      "Links1 Links1 Links2 Links2 Info Info"
+      "Footer Footer Footer Footer Footer Footer";
+  }
+
+  .Weather .date {
+    text-align: center;
+  }
+
+  .Weather .weather-container {
+    justify-content: center;
+  }
+}
+
+@media (width >= 1024px) {
+  .main-backdrop {
+    max-width: var(--size-lg);
+  }
+}

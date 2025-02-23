@@ -35,11 +35,11 @@ jobs:
         run: |
           set -e
           cd $CONTEXT_DIR
-          rm /tmp/build_args || echo OK
-          env >/tmp/build_args
-          echo "--build-arg \"CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA\"" >>/tmp/build_args
-          BUILD_ARGS=$(cat /tmp/build_args)
-          docker build -t $FULL_IMAGE_NAME -t $IMAGE_NAME_WITH_REGISTRY:latest -f Dockerfile $BUILD_ARGS --no-cache .
+          docker build -t $FULL_IMAGE_NAME -t $IMAGE_NAME_WITH_REGISTRY:latest \
+            --no-cache \
+            -f Dockerfile \
+            --build-arg "CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA" \
+            .
           docker push $IMAGE_NAME_WITH_REGISTRY:latest
           docker push $FULL_IMAGE_NAME
       - name: Deploy to CapRover

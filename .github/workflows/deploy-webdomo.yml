@@ -1,11 +1,11 @@
 name: Deploy webdomo
 
 env:
-  CONTEXT_DIR: "./sites/webdomo"
+  DOCKER_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-webdomo
+  CONTEXT_DIR: "./sites/webdomo"
   DOCKERFILE: Dockerfile
   CAPROVER_APP: webdomo
-  DOCKER_REGISTRY: ghcr.io
 
 on:
   push:
@@ -38,12 +38,12 @@ jobs:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
       - name: Build and push Docker image with built package
         uses: docker/build-push-action@v6
         with:
           context: ${{ env.CONTEXT_DIR }}
-          file: ${{ env.CONTEXT_DIR }}/Dockerfile
+          file: ${{ env.CONTEXT_DIR }}/${{ env.DOCKERFILE }}
           push: true
           build-args: |
             CAPROVER_GIT_COMMIT_SHA=${{ github.sha }}
@@ -55,4 +55,4 @@ jobs:
           server: ${{ secrets.CAPROVER_HOST }}
           app: ${{ env.CAPROVER_APP }}
           token: "${{ secrets.WEBDOMO_CAPROVER_APP_TOKEN }}"
-          image: "${{ env.FULL_IMAGE_NAME }}"
+          image: "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest"

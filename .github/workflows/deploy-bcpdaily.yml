@@ -1,4 +1,4 @@
-name: Deploy webdomo
+name: Deploy bcpdaily
 
 env:
   DOCKER_REGISTRY: ghcr.io

@@ -18,6 +18,11 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@v1
       - name: Log in to the Container registry
@@ -26,6 +31,14 @@ jobs:
           registry: ${{ env.DOCKER_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push Docker image with built package
         uses: docker/build-push-action@v6
         with:
@@ -34,9 +47,8 @@ jobs:
           push: true
           build-args: |
             CAPROVER_GIT_COMMIT_SHA=${{ github.sha }}
-          tags: |
-            ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}-gitsha
-            ghcr.io/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
       - name: Deploy to CapRover
         uses: caprover/deploy-from-github@v1.1.2
         with:

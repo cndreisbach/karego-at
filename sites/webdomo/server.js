@@ -32,7 +32,6 @@ fastify.get('/', function (request, reply) {
   const now = new Date()
 
   const params = {
-    seo,
     formattedDate: formatDate(now, 'iii MMM do'),
     bookmarkGroups1: config.bookmarkGroups1,
     bookmarkGroups2: config.bookmarkGroups2,

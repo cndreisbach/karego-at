@@ -38,7 +38,6 @@ jobs:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha
-            type=raw,value=latest
       - name: Build and push Docker image with built package
         uses: docker/build-push-action@v6
         with:
@@ -55,4 +54,4 @@ jobs:
           server: ${{ secrets.CAPROVER_HOST }}
           app: ${{ env.CAPROVER_APP }}
           token: "${{ secrets.WEBDOMO_CAPROVER_APP_TOKEN }}"
-          image: "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          image: "${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"

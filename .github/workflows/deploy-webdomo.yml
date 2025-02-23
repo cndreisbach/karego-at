@@ -13,6 +13,7 @@ on:
       - main
     paths:
       - "sites/webdomo/**"
+      - ".github/workflows/deploy-webdomo.yml"
 
 jobs:
   build-and-publish:

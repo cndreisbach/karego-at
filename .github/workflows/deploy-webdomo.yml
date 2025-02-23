@@ -2,7 +2,7 @@ name: Deploy webdomo
 
 env:
   CONTEXT_DIR: "./sites/webdomo"
-  IMAGE_NAME: ${{ github.repository }}/webdomo
+  IMAGE_NAME: ${{ github.repository }}-webdomo
   DOCKERFILE: Dockerfile
   CAPROVER_APP: webdomo
   DOCKER_REGISTRY: ghcr.io
@@ -30,18 +30,23 @@ jobs:
           registry: ${{ env.DOCKER_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and Push Release to DockerHub
-        shell: bash
-        run: |
-          set -e
-          cd $CONTEXT_DIR
-          docker build -t $FULL_IMAGE_NAME -t $IMAGE_NAME_WITH_REGISTRY:latest \
-            --no-cache \
-            -f Dockerfile \
-            --build-arg "CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA" \
-            .
-          docker push $IMAGE_NAME_WITH_REGISTRY:latest
-          docker push $FULL_IMAGE_NAME
+      - name: Build and push Docker image with built package
+        uses: docker/build-push-action@v4
+        with:
+          context: $CONTEXT_DIR
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            CAPROVER_GIT_COMMIT_SHA=$GITHUB_SHA
+          tags: |
+            $IMAGE_NAME_WITH_REGISTRY:latest
+            $FULL_IMAGE_NAME
+      # - name: Push Release to DockerHub
+      #   shell: bash
+      #   run: |
+      #     set -e
+      #     docker push $IMAGE_NAME_WITH_REGISTRY:latest
+      #     docker push $FULL_IMAGE_NAME
       - name: Deploy to CapRover
         uses: caprover/deploy-from-github@v1.1.2
         with:

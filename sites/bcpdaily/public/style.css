@@ -1,0 +1,61 @@
+@import "https://unpkg.com/open-props";
+/* @import "https://unpkg.com/open-props/normalize.min.css"; */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  --font-header: 'Libre Baskerville', serif;
+  --font-body: var(--font-header);
+  --page-bg: var(--indigo-2);
+  --surface: var(--indigo-1);
+  --text1: var(--gray-9);
+  --text2: var(--gray-7);
+  --header1: var(--grape-8);
+  --header2: var(--grape-7);
+}
+
+body {  
+  background-color: var(--page-bg);
+  color: var(--text1);
+}
+
+.content {
+  font-family: var(--font-body);
+  max-width: 40rem;
+  margin: var(--size-3) auto;
+  background-color: var(--surface);
+  padding: var(--size-3) var(--size-5);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-2);
+}
+
+h1 {
+  font-size: var(--font-size-5);
+  color: var(--header1);
+  font-family: var(--font-header);
+}
+
+h2 {
+  color: var(--header2);
+  font-family: var(--font-header);
+}
+
+pre {
+  padding: var(--size-3);
+  background-color: white;
+}
+
+.readings {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: var(--size-6);
+}
+
+.reading h3 {
+  margin-top: 0;
+}
+
+.reading ul {
+  list-style: none;
+  padding-left: 0;
+}

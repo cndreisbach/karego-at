@@ -5,16 +5,18 @@ import seo from './src/seo.json'
 
 import { formatDate } from 'date-fns'
 import Handlebars from 'handlebars'
+import { error, info } from '@karego-at/log'
+
 const TZ_OFFSET = -4 * 60 * 60 * 1000
 
 const port = Bun.env.PORT || 9000
 
-console.log('Serving on port', port)
+info('Serving on port', port)
 
 const serveStatic = (basePath: string) => {
-  console.log('Serving static files from', basePath)
+  info('Serving static files from', basePath)
   return async function (req: BunRequest) {
-    console.log('Request for file', req.url)
+    info('Request for file', req.url)
     const trimLeftRegex = new RegExp(`^/${basePath}/?`)
     let filePath = path.join(
       basePath,
@@ -23,7 +25,7 @@ const serveStatic = (basePath: string) => {
 
     const file = Bun.file(filePath)
     if (!(await file.exists())) {
-      console.log(`File not found ${filePath}`)
+      info('File not found', filePath)
       return new Response('Not found', { status: 404 })
     }
     // Does not currently work
@@ -31,7 +33,7 @@ const serveStatic = (basePath: string) => {
       filePath = path.join(filePath, 'index.html')
     }
 
-    console.log('Serving file', filePath)
+    info('Serving file', filePath)
 
     return new Response(file)
   }
@@ -73,7 +75,7 @@ const server = Bun.serve({
     },
   },
   error: (err) => {
-    console.error(err)
+    error('Internal server error', err.message)
     return new Response('Internal server error', { status: 500 })
   },
 })

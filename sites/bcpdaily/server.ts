@@ -37,6 +37,25 @@ const serveStatic = (basePath: string) => {
   }
 }
 
+const buildReply = async (date: Date) => {
+  date.setTime(date.getTime() + TZ_OFFSET)
+  const { readings, year, season, week, day } = await bcp.getDailyReadings(date)
+  const params = {
+    seo,
+    readings,
+    readingsJSON: JSON.stringify(readings, null, 2),
+    year,
+    season,
+    week,
+    day,
+    date: formatDate(date, 'EEEE, d MMMM yyyy'),
+  }
+
+  const template = await Bun.file('./src/pages/index.hbs').text()
+  const compiledTemplate = Handlebars.compile(template)
+  return compiledTemplate(params)
+}
+
 const server = Bun.serve({
   development: Bun.env.BUN_ENV === 'dev',
   port,
@@ -44,24 +63,7 @@ const server = Bun.serve({
     '/public/*': serveStatic('public'),
     '/': async () => {
       const today = new Date()
-      today.setTime(today.getTime() + TZ_OFFSET)
-      const { readings, year, season, week, day } = await bcp.getDailyReadings(
-        today
-      )
-      const params = {
-        seo,
-        readings,
-        readingsJSON: JSON.stringify(readings, null, 2),
-        year,
-        season,
-        week,
-        day,
-        date: formatDate(today, 'EEEE, d MMMM yyyy'),
-      }
-
-      const template = await Bun.file('./src/pages/index.hbs').text()
-      const compiledTemplate = Handlebars.compile(template)
-      const reply = compiledTemplate(params)
+      const reply = await buildReply(today)
 
       return new Response(reply, {
         headers: {

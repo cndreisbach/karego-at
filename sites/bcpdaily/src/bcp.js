@@ -1,19 +1,19 @@
-const lectionary = require('daily-office-lectionary')
-const dateFormat = require('date-fns/format')
-const dateSub = require('date-fns/sub')
-const dateAdd = require('date-fns/add')
-const differenceInWeeks = require('date-fns/differenceInWeeks')
-const nextSunday = require('date-fns/nextSunday')
-const previousSunday = require('date-fns/previousSunday')
-const nextMonday = require('date-fns/nextMonday')
+import lectionary from 'daily-office-lectionary'
+import dateFormat from 'date-fns/format'
+import dateSub from 'date-fns/sub'
+import dateAdd from 'date-fns/add'
+import differenceInWeeks from 'date-fns/differenceInWeeks'
+import nextSunday from 'date-fns/nextSunday'
+import previousSunday from 'date-fns/previousSunday'
+import nextMonday from 'date-fns/nextMonday'
 
-const getAdvent = year => {
+const getAdvent = (year) => {
   //in javascript months are zero-indexed. january is 0, december is 11
   const xmasEve = new Date(year, 11, 24)
   return dateSub(xmasEve, { weeks: 3, days: xmasEve.getDay() })
 }
 
-const getEaster = year => {
+const getEaster = (year) => {
   // https://en.wikipedia.org/wiki/Date_of_Easter#Anonymous_Gregorian_algorithm
   const a = year % 19
   const b = Math.floor(year / 100)
@@ -33,16 +33,16 @@ const getEaster = year => {
   return new Date(year, 3, p)
 }
 
-const getPentecost = year => {
+const getPentecost = (year) => {
   return dateAdd(getEaster(year), { weeks: 7 })
 }
 
-const getLent = year => {
+const getLent = (year) => {
   const easter = getEaster(year)
   return dateSub(easter, { weeks: 6, days: 4 })
 }
 
-const getDailyReadingYear = date => {
+export const getDailyReadingYear = (date) => {
   const year = date.getFullYear()
   const advent = getAdvent(year)
   if (date >= advent) {
@@ -52,7 +52,7 @@ const getDailyReadingYear = date => {
   }
 }
 
-const getSeason = date => {
+export const getSeason = (date) => {
   const year = date.getFullYear()
   const xmas = new Date(year, 11, 25)
   const epiphany = new Date(year, 0, 6)
@@ -72,7 +72,7 @@ const getSeason = date => {
   }
 }
 
-const getWeek = date => {
+export const getWeek = (date) => {
   const year = date.getFullYear()
 
   const season = getSeason(date)
@@ -151,7 +151,7 @@ const getWeek = date => {
   }
 }
 
-const getDailyReadings = async (date) => {
+export const getDailyReadings = async (date) => {
   const year = getDailyReadingYear(date)
   const season = getSeason(date)
   const week = getWeek(date)
@@ -161,12 +161,8 @@ const getDailyReadings = async (date) => {
     year,
     season,
     week,
-    day
-  })  
+    day,
+  })
 
   return { readings, year, season, week, day }
-}
-
-module.exports = {
-  getDailyReadingYear, getSeason, getWeek, getDailyReadings
 }

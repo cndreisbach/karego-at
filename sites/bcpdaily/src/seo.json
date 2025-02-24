@@ -1,5 +1,4 @@
 {
-  "glitch-help-instructions": "For a custom domain, change the 'url' parameter from 'glitch-default' to your domain _without_ a traling slash, like 'https://www.example.com'",
   "title": "Book of Common Prayer Daily",
   "description": "Get daily readings from the Book of Common Prayer",
   "url": "glitch-default",

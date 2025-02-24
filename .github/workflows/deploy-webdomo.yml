@@ -8,6 +8,7 @@ env:
   CAPROVER_APP: webdomo
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main

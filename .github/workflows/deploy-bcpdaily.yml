@@ -3,8 +3,8 @@ name: Deploy bcpdaily
 env:
   DOCKER_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-bcpdaily
-  CONTEXT_DIR: './sites/bcpdaily'
-  DOCKERFILE: Dockerfile
+  CONTEXT_DIR: '.'
+  DOCKERFILE: ./sites/bcpdaily/Dockerfile
   CAPROVER_APP: bcpdaily
 
 on:
@@ -26,12 +26,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v1
-      - uses: oven-sh/setup-bun@v2
-      - name: Build one-file bundle
-        run: |
-          cd ${{ env.CONTEXT_DIR }}
-          bun install
-          bun build --target=bun --outfile=bundle.js ./server.ts
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:

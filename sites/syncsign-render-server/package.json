@@ -1,0 +1,16 @@
+{
+  "name": "home-panel-api",
+  "module": "server.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.5.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@googleapis/calendar": "^9.7.9",
+    "date-fns": "^4.1.0"
+  }
+}

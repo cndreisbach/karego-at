@@ -3,13 +3,13 @@ function getDate() {
 }
 
 export function info(...messages: any[]) {
-  console.log(getDate(), '[INFO]', ...messages)
+  console.log('[INFO]', ...messages)
 }
 
 export function warn(...messages: any[]) {
-  console.log(getDate(), '[WARN]', ...messages)
+  console.log('[WARN]', ...messages)
 }
 
 export function error(...messages: any[]) {
-  console.log(getDate(), '[ERROR]', ...messages)
+  console.error('[ERROR]', ...messages)
 }

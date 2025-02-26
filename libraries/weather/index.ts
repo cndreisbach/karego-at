@@ -118,7 +118,7 @@ export class WeatherService {
     const currentWeather = current.weather[0]
     const today = daily[0]
 
-    const timeOfRainDt = hourly.find((hour) => hour.pop > 0)?.dt
+    const timeOfRainDt = hourly.slice(0, 12).find((hour) => hour.pop > 0)?.dt
     const timeOfRain = timeOfRainDt
       ? formatDate(new Date(timeOfRainDt * 1000), 'HH:mm')
       : null

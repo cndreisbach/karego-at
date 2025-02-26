@@ -256,7 +256,7 @@ const makeWeatherItems = (weather: ResponseBody['weather']) => {
     )
   )
 
-  if (today.timeOfRain) {
+  if (today.chanceOfRain > 0 && today.timeOfRain != null) {
     y += 4
     items.push(
       textItem(`Rain expected at ${today.timeOfRain}`, 'ROBOTO_CONDENSED_24', {

@@ -238,24 +238,14 @@ const makeWeatherItems = (weather: ResponseBody['weather']) => {
     ),
   ]
 
-  y += 8
-  items.push(
-    textItem(weather.today.description, 'DDIN_CONDENSED_24', {
-      x: u(1),
-      y: u(y),
-      w: u(48),
-      h: u(4),
-    })
-  )
-
   y += 4
   items.push(
     textItem(
-      `Day ${formatTemp(today.day)}, night ${formatTemp(today.night)}`,
-      'DDIN_CONDENSED_24',
+      `High ${formatTemp(today.high)}, low ${formatTemp(today.low)}`,
+      'ROBOTO_CONDENSED_24',
       {
         x: u(1),
-        y: u(20),
+        y: u(y),
         w: u(48),
         h: u(4),
       }
@@ -265,9 +255,9 @@ const makeWeatherItems = (weather: ResponseBody['weather']) => {
   if (today.timeOfRain) {
     y += 4
     items.push(
-      textItem(`Rain expected at ${today.timeOfRain}`, 'DDIN_CONDENSED_24', {
+      textItem(`Rain expected at ${today.timeOfRain}`, 'ROBOTO_CONDENSED_24', {
         x: u(1),
-        y: u(24),
+        y: u(y),
         w: u(48),
         h: u(4),
       })
@@ -286,7 +276,7 @@ const makeWeatherItems = (weather: ResponseBody['weather']) => {
         'DDIN_CONDENSED_24',
         {
           x: u(1),
-          y: u(28),
+          y: u(y),
           w: u(48),
           h: u(4),
         },

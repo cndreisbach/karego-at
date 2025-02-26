@@ -18,6 +18,8 @@ export type Weather = {
     description: string
     day: Temperature
     night: Temperature
+    high: Temperature
+    low: Temperature
     uvi: number
     chanceOfRain: number
     timeOfRain: string | null
@@ -134,6 +136,8 @@ export class WeatherService {
         description: today.summary,
         day: convertTemp(today.temp.day),
         night: convertTemp(today.temp.night),
+        high: convertTemp(today.temp.max),
+        low: convertTemp(today.temp.min),
         uvi: today.uvi,
         chanceOfRain: today.pop,
         timeOfRain,

@@ -1,4 +1,5 @@
 import { formatDate, parseISO } from 'date-fns'
+import { TZDate } from '@date-fns/tz'
 import type { ResponseBody } from './types'
 import { weatherIconMap } from './weather'
 
@@ -195,8 +196,11 @@ export const makeCalendarEventTextItems = (
       })
     )
   } else {
-    const formattedStart = formatDate(parseISO(event.start), 'HH:mm')
-    const formattedEnd = formatDate(parseISO(event.end), 'HH:mm')
+    const start = new TZDate(event.start).withTimeZone('America/New_York')
+    const end = new TZDate(event.end).withTimeZone('America/New_York')
+
+    const formattedStart = formatDate(start, 'HH:mm')
+    const formattedEnd = formatDate(end, 'HH:mm')
 
     items.push(
       textItem(`${formattedStart} - ${formattedEnd}`, 'ROBOTO_CONDENSED_24', {
@@ -238,7 +242,7 @@ const makeWeatherItems = (weather: ResponseBody['weather']) => {
     ),
   ]
 
-  y += 4
+  y += 8
   items.push(
     textItem(
       `High ${formatTemp(today.high)}, low ${formatTemp(today.low)}`,

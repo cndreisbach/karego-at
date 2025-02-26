@@ -10,8 +10,9 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
     "@googleapis/calendar": "^9.7.9",
-    "date-fns": "^4.1.0",
-    "@karego-at/weather": "workspace:*"
+    "@karego-at/weather": "workspace:*",
+    "date-fns": "^4.1.0"
   }
 }

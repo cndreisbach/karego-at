@@ -8,6 +8,7 @@ import {
 import type { ResponseBody } from './src/types'
 import { transformResponseBodyToSyncsignTemplate } from './src/syncsign'
 import { info } from './src/logger'
+import { TZDate } from '@date-fns/tz'
 
 const config = {
   defaultLat: 36.074,
@@ -20,7 +21,7 @@ const config = {
 }
 
 const buildResponseBody: () => Promise<ResponseBody> = async () => {
-  const now = new Date()
+  const now = new TZDate().withTimeZone('America/New_York')
   const startDate = startOfDay(now)
   const endDate = endOfDay(now)
   const currentTime = now

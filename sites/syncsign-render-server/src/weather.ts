@@ -1,61 +1,16 @@
-import { MINUTES } from './util'
-
-const store = new Map()
-const STORE_KEY = 'storedWeather'
-const KELVIN = 273.15
-const TIME_TO_CACHE_WEATHER = 30 * MINUTES
-
-const weatherConfig = {
-  icons: 'Nord',
-  unit: 'F',
-}
+import { WeatherService } from '@karego-at/weather'
 
 export const getWeather = async (latitude: number, longitude: number) => {
-  const now = Date.now()
-  const storedWeather = store.get(STORE_KEY)
+  const weatherService = new WeatherService(
+    process.env.WEATHER_API_KEY || '',
+    latitude,
+    longitude
+  )
 
-  if (
-    storedWeather &&
-    storedWeather.lat === latitude &&
-    storedWeather.lng === longitude &&
-    storedWeather.time &&
-    now - storedWeather.time < TIME_TO_CACHE_WEATHER
-  ) {
-    return storedWeather.results
-  }
-
-  const api = `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&lang=en&exclude=minutely,hourly&appid=${process.env.WEATHER_API_KEY}`
-  const response = await fetch(api)
-  const data = await response.json()
-  const celsius = Math.floor(data.current.temp - KELVIN)
-  const currentWeather = data.current.weather[0]
-  const weatherId = currentWeather.id
-  const icon = iconMap[currentWeather.icon]
-  const results: {
-    icon: string
-    unit: string
-    value?: number
-    description?: string
-  } = {
-    icon,
-    unit: weatherConfig.unit,
-  }
-  results.value = results.unit === 'C' ? celsius : (celsius * 9) / 5 + 32
-  results.description = currentWeather.description
-
-  const weatherToStore = {
-    lat: latitude,
-    lng: longitude,
-    time: now,
-    results,
-  }
-
-  store.set(STORE_KEY, weatherToStore)
-
-  return results
+  return weatherService.getWeather()
 }
 
-const iconMap: Record<string, string> = {
+export const weatherIconMap: Record<string, string> = {
   // Icons returned are Unicode characters for https://erikflowers.github.io/weather-icons/
   // 01d / 01n - clear sky
   // 02d / 02n - few clouds

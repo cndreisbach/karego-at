@@ -3,8 +3,8 @@ name: Deploy syncsign-render-server
 env:
   DOCKER_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-syncsign-render-server
-  CONTEXT_DIR: './sites/syncsign-render-server'
-  DOCKERFILE: Dockerfile
+  CONTEXT_DIR: '.'
+  DOCKERFILE: ./sites/syncsign-render-server/Dockerfile
   CAPROVER_APP: syncsign
 
 on:

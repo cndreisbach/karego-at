@@ -1,5 +1,6 @@
 import { formatDate, parseISO } from 'date-fns'
 import type { ResponseBody } from './types'
+import { weatherIconMap } from './weather'
 
 // width = 800, height = 480
 
@@ -210,6 +211,95 @@ export const makeCalendarEventTextItems = (
   return items
 }
 
+const formatTemp = ({ unit, value }: { unit: string; value: number }) =>
+  `${Math.round(value)}°${unit}`
+
+const makeWeatherItems = (weather: ResponseBody['weather']) => {
+  const { current, today } = weather
+
+  let y = 8
+
+  const items: TemplateItem[] = [
+    textItem(weatherIconMap[current.icon], 'ICON_WEATHER', {
+      x: u(1),
+      y: u(y),
+      w: u(8),
+      h: u(8),
+    }),
+    textItem(
+      `${formatTemp(current.temperature)} ${current.description}`,
+      'DDIN_CONDENSED_32',
+      {
+        x: u(9),
+        y: u(y + 2),
+        w: u(40),
+        h: u(5),
+      }
+    ),
+  ]
+
+  y += 8
+  items.push(
+    textItem(weather.today.description, 'DDIN_CONDENSED_24', {
+      x: u(1),
+      y: u(y),
+      w: u(48),
+      h: u(4),
+    })
+  )
+
+  y += 4
+  items.push(
+    textItem(
+      `Day ${formatTemp(today.day)}, night ${formatTemp(today.night)}`,
+      'DDIN_CONDENSED_24',
+      {
+        x: u(1),
+        y: u(20),
+        w: u(48),
+        h: u(4),
+      }
+    )
+  )
+
+  if (today.timeOfRain) {
+    y += 4
+    items.push(
+      textItem(`Rain expected at ${today.timeOfRain}`, 'DDIN_CONDENSED_24', {
+        x: u(1),
+        y: u(24),
+        w: u(48),
+        h: u(4),
+      })
+    )
+  }
+
+  if (today.uvi > 5) {
+    y += 4
+
+    const uviWarning = today.uvi > 8 ? 'very high' : 'high'
+    const uviTextColor = today.uvi > 8 ? 'RED' : 'BLACK'
+
+    items.push(
+      textItem(
+        `UV index: ${today.uvi} (${uviWarning})`,
+        'DDIN_CONDENSED_24',
+        {
+          x: u(1),
+          y: u(28),
+          w: u(48),
+          h: u(4),
+        },
+        {
+          textColor: uviTextColor,
+        }
+      )
+    )
+  }
+
+  return items
+}
+
 export const transformResponseBodyToSyncsignTemplate = (
   body: ResponseBody
 ): SyncsignTemplate => {
@@ -229,43 +319,21 @@ export const transformResponseBodyToSyncsignTemplate = (
     makeCalendarEventTextItems(index, event)
   )
 
+  const weatherItems = makeWeatherItems(weather)
+
   return {
     background: {
       bgColor: 'WHITE',
       enableButtonZone: false,
     },
     items: [
-      // rectangleItem(
-      //   {
-      //     x: u(0),
-      //     y: u(0),
-      //     w: u(50),
-      //     h: u(60),
-      //   },
-      //   4
-      // ),
       textItem(date, 'DDIN_48', {
         x: u(1),
         y: u(1),
         w: u(48),
         h: u(7),
       }),
-      textItem(weather.icon, 'ICON_WEATHER', {
-        x: u(1),
-        y: u(8),
-        w: u(8),
-        h: u(8),
-      }),
-      textItem(
-        `${weather.value}°${weather.unit} ${weather.description}`,
-        'DDIN_CONDENSED_32',
-        {
-          x: u(9),
-          y: u(10),
-          w: u(40),
-          h: u(5),
-        }
-      ),
+      ...weatherItems,
       ...calendarItems,
     ],
   }

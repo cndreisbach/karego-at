@@ -13,4 +13,6 @@ ENV NODE_ENV production
 ENV PORT 80
 EXPOSE 80
 
-CMD [ "bun", "server.ts" ]
+WORKDIR /usr/src/app/sites/syncsign-render-server
+
+CMD [ "bun", "./server.ts" ]

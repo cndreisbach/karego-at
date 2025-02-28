@@ -349,13 +349,13 @@ export const transformResponseBodyToSyncsignTemplate = (
       ...weatherItems,
       textItem('WiFi: Lonely Mountain', 'ROBOTO_CONDENSED_24', {
         x: u(1),
-        y: u(42),
+        y: u(39),
         w: u(48),
         h: u(3),
       }),
       qrCodeItem('WIFI:T:WPA;S:Lonely Mountain;P:Arkenstone;;', {
         x: u(1),
-        y: u(46),
+        y: u(43),
       }),
       ...calendarItems,
     ],

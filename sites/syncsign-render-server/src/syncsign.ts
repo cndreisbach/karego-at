@@ -137,6 +137,25 @@ interface TemplateQRCodeItem {
   }
 }
 
+function qrCodeItem(
+  text: string,
+  position: { x: number; y: number },
+  scale = 4,
+  version = 4,
+  eccLevel: 'LOW' | 'MEDIUM' | 'QUARTILE' | 'HIGH' = 'MEDIUM'
+): TemplateQRCodeItem {
+  return {
+    type: 'QRCODE',
+    data: {
+      text,
+      position,
+      scale,
+      version,
+      eccLevel,
+    },
+  }
+}
+
 type TemplateItem =
   | TemplateTextItem
   | TemplateRectangleItem
@@ -328,6 +347,16 @@ export const transformResponseBodyToSyncsignTemplate = (
         h: u(7),
       }),
       ...weatherItems,
+      textItem('WiFi: Lonely Mountain', 'ROBOTO_CONDENSED_24', {
+        x: u(1),
+        y: u(46),
+        w: u(48),
+        h: u(3),
+      }),
+      qrCodeItem('WIFI:T:WPA;S:Lonely Mountain;P:Arkenstone;;', {
+        x: u(1),
+        y: u(50),
+      }),
       ...calendarItems,
     ],
   }
